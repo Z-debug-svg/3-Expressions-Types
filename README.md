@@ -420,7 +420,85 @@ Output :
 757
 
 
+# Postfix to Infix Algorithm ：
+Postfix notation, also known as reverse Polish notation, is a syntax for mathematical expressions in which the mathematical operator is always placed after the operands. Though postfix expressions are easily and efficiently evaluated by computers, they can be difficult for humans to read. Complex expressions using standard parenthesized infix notation are often more readable than the corresponding postfix expressions. Consequently, we would sometimes like to allow end users to work with infix notation and then convert it to postfix notation for computer processing. Sometimes, moreover, expressions are stored or generated in postfix, and we would like to convert them to infix for the purpose of reading and editing
 
+Examples:
+Input : abc++
+Output : (a + (b + c))
+Input  : ab*c+
+Output : ((a*b)+c)
+
+# Algorithm ： 
+1.While there are input symbol left
+…1.1 Read the next symbol from the input.
+2.If the symbol is an operand
+…2.1 Push it onto the stack.
+3.Otherwise,
+…3.1 the symbol is an operator.
+…3.2 Pop the top 2 values from the stack.
+…3.3 Put the operator, with the values as arguments and form a string.
+…3.4 Push the resulted string back to stack.
+4.If there is only one value in the stack
+…4.1 That value in the stack is the desired infix string.
+
+Below is the implementation of above approach:
+// CPP program to find infix for 
+// a given postfix. 
+#include <bits/stdc++.h> 
+using namespace std; 
+  
+bool isOperand(char x) 
+{ 
+   return (x >= 'a' && x <= 'z') || 
+          (x >= 'A' && x <= 'Z'); 
+} 
+  
+// Get Infix for a given postfix 
+// expression 
+string getInfix(string exp) 
+{ 
+    stack<string> s; 
+  
+    for (int i=0; exp[i]!='\0'; i++) 
+    { 
+        // Push operands 
+        if (isOperand(exp[i])) 
+        { 
+           string op(1, exp[i]); 
+           s.push(op); 
+        } 
+  
+        // We assume that input is 
+        // a valid postfix and expect 
+        // an operator. 
+        else
+        { 
+            string op1 = s.top(); 
+            s.pop(); 
+            string op2 = s.top(); 
+            s.pop(); 
+            s.push("(" + op2 + exp[i] + 
+                   op1 + ")"); 
+        } 
+    } 
+  
+    // There must be a single element 
+    // in stack now which is the required 
+    // infix. 
+    return s.top(); 
+} 
+  
+// Driver code 
+int main() 
+{ 
+    string exp = "ab*c+"; 
+    cout << getInfix(exp); 
+    return 0; 
+} 
+
+Output:
+((a*b)+c)
 
 
 
